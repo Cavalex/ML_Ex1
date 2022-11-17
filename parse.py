@@ -47,7 +47,7 @@ def parse(fileName):
     
     elif fileName == "heart.csv":
 
-        df.columns = df.columns.str.lstrip("'")
+        #df.columns = df.columns.str.lstrip("'")
 
         # deleting unnecessary columns
         # damn these quotation marks
@@ -56,31 +56,26 @@ def parse(fileName):
         del df["\'ca\'"]
 
         # replacing the string values with ints
-        df = df.replace(["female"], 0)
-        df = df.replace(["male"], 1)
+        df = df.replace({"female": 0, "male": 1})
 
-        df = df.replace(["typ_angina"], 1)
-        df = df.replace(["atyp_angina"], 2)
-        df = df.replace(["non_anginal"], 3)
-        df = df.replace(["asympt"], 4)
+        df = df.replace({"typ_angina": 1, "atyp_angina": 2, "non_anginal": 3, "asympt": 4})
 
-        df = df.replace(["f"], 0)
-        df = df.replace(["t"], 1)
+        df = df.replace({"f": 0, "t": 1})
 
-        df = df.replace(["normal"], 0)
-        df = df.replace(["st_t_wave_abnormality"], 1)
-        df = df.replace(["left_vent_hyper"], 2)
-        
-        df = df.replace(["no"], 0)
-        df = df.replace(["yes"], 1)
+        df = df.replace({"normal": 0, "st_t_wave_abnormality": 1, "left_vent_hyper": 2})
 
-        df = df.replace(["\'<50\'"], 0)
-        df = df.replace(["\'>50_1\'"], 1)
+        df = df.replace({"no": 0, "yes": 1})
+
+        df = df.replace({"\'<50\'": 0, "\'>50_1\'": 1})
     
         totalRows = len(df.index)
         for i in range(len(df.columns)):
             df = df.loc[df[df.columns[i]] != "?"]
         deletedRows  = totalRows - len(df.index)
+
+        # convert everything to int
+        for col in df:
+            df[col] = df[col].astype('int')
 
     # --------------------------- AMAZON ---------------------------
     
