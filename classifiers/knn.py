@@ -4,6 +4,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import classification_report, confusion_matrix
 import pandas as pd 
 
+from config import *
+
 # K-Nearest Neighbour 
 def knn(df):
     # Use head() function to return the first 5 rows: 
@@ -34,7 +36,7 @@ def knn(df):
     print("Classifying...")
 
     # Use the KNN classifier to fit data:
-    classifier = KNeighborsClassifier(n_neighbors=5)
+    classifier = KNeighborsClassifier(n_neighbors=K_NEIGHBOURS)
     classifier.fit(X_train, y_train) 
 
     print("Predicting...")

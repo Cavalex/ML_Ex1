@@ -5,5 +5,7 @@ DATASETS = [
     "amz.csv",
     "football.csv",
     "voting.csv",
-    "concrete.csv"
+    "heart.csv"
 ]
+
+K_NEIGHBOURS = 5 # to be used in the knn algo

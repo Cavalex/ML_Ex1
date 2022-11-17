@@ -12,6 +12,11 @@ def parseDatasets(dataset_dfs):
     for dataset in DATASETS:
         dataset_dfs.append(parse(dataset))
 
+def readParsedDatasets(dataset_dfs):
+    for dataset in DATASETS:
+        fileToBeRead = f".{DATASET_FOLDER}/{dataset}"
+        dataset_dfs.append(pd.read_csv(fileToBeRead,  sep=',', on_bad_lines="skip"))
+
 def classifyDatasets(dataset_dfs, classifiers):
     classifications = {}
 

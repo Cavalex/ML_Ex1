@@ -5,6 +5,7 @@ import numpy
 import random
 
 from arff_to_csv import *
+from config import *
 
 
 def saveToFile(df, fileName):
@@ -42,10 +43,40 @@ def parse(fileName):
         # add the sum columns
         #df['ATT_Sum'] = df['ATT_ATT_diff'].astype(float) + df['ATT_DEF_diff'].astype(float) + df['ATT_CEN_diff'].astype(float) + df["ATT_GOK_diff"].astype(float)
 
-    # --------------------------- CONCRETE ---------------------------
+    # --------------------------- HEART ---------------------------
     
-    # fortunately there are no missing values and all the available ones are numbers that we can work with
-    elif fileName == "concrete.csv":
+    elif fileName == "heart.csv":
+
+        df.columns = df.columns.str.lstrip("'")
+
+        # deleting unnecessary columns
+        # damn these quotation marks
+        del df["\'thal\'"]
+        del df["\'slope\'"]
+        del df["\'ca\'"]
+
+        # replacing the string values with ints
+        df = df.replace(["female"], 0)
+        df = df.replace(["male"], 1)
+
+        df = df.replace(["typ_angina"], 1)
+        df = df.replace(["atyp_angina"], 2)
+        df = df.replace(["non_anginal"], 3)
+        df = df.replace(["asympt"], 4)
+
+        df = df.replace(["f"], 0)
+        df = df.replace(["t"], 1)
+
+        df = df.replace(["normal"], 0)
+        df = df.replace(["st_t_wave_abnormality"], 1)
+        df = df.replace(["left_vent_hyper"], 2)
+        
+        df = df.replace(["no"], 0)
+        df = df.replace(["yes"], 1)
+
+        df = df.replace(["\'<50\'"], 0)
+        df = df.replace(["\'>50_1\'"], 1)
+    
         totalRows = len(df.index)
         for i in range(len(df.columns)):
             df = df.loc[df[df.columns[i]] != "?"]
