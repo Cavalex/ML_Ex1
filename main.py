@@ -38,7 +38,7 @@ def classifyDatasets(classifiers):
 def main():
     classifications = {} # stores the classifications of each dataset according to a specific classifier
     dataset_dfs = [] # stores the dataframes of each dataset after parsing
-    classifiers = [knn,dt, nb]
+    classifiers = [knn, dt, nb]
 
     convertFiles() # converts from arff to csv
     print("\nConverted arff files")

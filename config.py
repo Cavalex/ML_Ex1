@@ -8,4 +8,7 @@ DATASETS = [
     "heart"
 ]
 
-K_NEIGHBOURS = 5 # to be used in the knn algo
+TEST_SIZE = 0.2 # from 0 to 1
+
+K_NEIGHBOURS = 7 # to be used in the knn algo
+DT_DEPTH = 7 # to be used in the dt algo

@@ -62,4 +62,6 @@ def knn(df, dataset):
     #print(classification_report(y_test, y_predict))
 
     #return confusion_matrix(y_test, y_predict)
+
     return classification_report(y_test, y_predict)
+    #return classification_report(y_test, y_predict)

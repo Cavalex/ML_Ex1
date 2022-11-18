@@ -28,13 +28,13 @@ def dt(df, dataset):
     print(" | Splitting", end="")
 
     # Split dataset into random train and test subsets:
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=TEST_SIZE)
 
     print(" | Classifying", end="")
     # Train the decision tree classifier by fitting the DecisionTreeClassifier 
     # change max_depth to change proabibilities
     # classifier = DecisionTreeClassifier(max_depth=4)
-    classifier = DecisionTreeClassifier(criterion='entropy', max_depth=4)
+    classifier = DecisionTreeClassifier(criterion='entropy', max_depth=DT_DEPTH)
     classifier = classifier.fit(X_train, y_train)
 
     print(" | Predicting \n", end="")
@@ -50,8 +50,8 @@ def dt(df, dataset):
     feature_names = X.columns
     feature_importance = pd.DataFrame(
     classifier.feature_importances_, index=feature_names).sort_values(0, ascending=False)
-    print(" Feature Importance: ")
-    print(feature_importance)
+    #print(" Feature Importance: ")
+    #print(feature_importance)
 
     return classification_report(y_test, predictions)
 
