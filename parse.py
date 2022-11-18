@@ -9,20 +9,20 @@ from config import *
 
 
 def saveToFile(df, fileName):
-    df.to_csv(f".{DATASET_FOLDER}/{fileName[:-4]}" + "_parsed.csv" , sep=';', index = False, encoding='mbcs')
+    df.to_csv(f".{DATASET_FOLDER}/{fileName}" + "_parsed.csv" , sep=';', index = False, encoding='mbcs')
 
 def parse(fileName):
 
     totalRows = 0
     deletedRows = 0
 
-    fileToBeRead = f".{DATASET_FOLDER}/{fileName}"
+    fileToBeRead = f".{DATASET_FOLDER}/{fileName}.csv"
     df = pd.read_csv(fileToBeRead,  sep=',', on_bad_lines="skip") # reads the csv file and creates a dataframe based on it
     #print(f"\nLoaded {fileToBeRead}")
 
     # --------------------------- FOOTBALL ---------------------------
 
-    if fileName == "football.csv":
+    if fileName == "football":
 
         # deleting unnecessary columns
         del df["id_match"]
@@ -45,9 +45,9 @@ def parse(fileName):
 
     # --------------------------- HEART ---------------------------
     
-    elif fileName == "heart.csv":
+    elif fileName == "heart":
 
-        df.columns = df.columns.str.lstrip("'")
+        #df.columns = df.columns.str.lstrip("'")
 
         # deleting unnecessary columns
         # damn these quotation marks
@@ -56,36 +56,31 @@ def parse(fileName):
         del df["\'ca\'"]
 
         # replacing the string values with ints
-        df = df.replace(["female"], 0)
-        df = df.replace(["male"], 1)
+        df = df.replace({"female": 0, "male": 1})
 
-        df = df.replace(["typ_angina"], 1)
-        df = df.replace(["atyp_angina"], 2)
-        df = df.replace(["non_anginal"], 3)
-        df = df.replace(["asympt"], 4)
+        df = df.replace({"typ_angina": 1, "atyp_angina": 2, "non_anginal": 3, "asympt": 4})
 
-        df = df.replace(["f"], 0)
-        df = df.replace(["t"], 1)
+        df = df.replace({"f": 0, "t": 1})
 
-        df = df.replace(["normal"], 0)
-        df = df.replace(["st_t_wave_abnormality"], 1)
-        df = df.replace(["left_vent_hyper"], 2)
-        
-        df = df.replace(["no"], 0)
-        df = df.replace(["yes"], 1)
+        df = df.replace({"normal": 0, "st_t_wave_abnormality": 1, "left_vent_hyper": 2})
 
-        df = df.replace(["\'<50\'"], 0)
-        df = df.replace(["\'>50_1\'"], 1)
+        df = df.replace({"no": 0, "yes": 1})
+
+        df = df.replace({"\'<50\'": 0, "\'>50_1\'": 1})
     
         totalRows = len(df.index)
         for i in range(len(df.columns)):
             df = df.loc[df[df.columns[i]] != "?"]
         deletedRows  = totalRows - len(df.index)
 
+        # convert everything to int
+        for col in df:
+            df[col] = df[col].astype('int')
+
     # --------------------------- AMAZON ---------------------------
     
     # we think there's nothing to parse here
-    elif fileName == "amz.csv":
+    elif fileName == "amz":
         
         del df["Class"]
 
@@ -96,7 +91,7 @@ def parse(fileName):
 
     # --------------------------- VOTING ---------------------------
     
-    elif fileName == "voting.csv":
+    elif fileName == "voting":
 
         # delete the id column because we don't need it to classify anything
         del df["ID"]
