@@ -1,12 +1,13 @@
 import pandas as pd
+import numpy as np
 from sklearn.model_selection import train_test_split
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import classification_report, accuracy_score, precision_score
 
 from config import *
 
-# Decision Trees
-def dt(df, dataset):
+# Gaussian Naive Bayes
+def nb(df, dataset):
 
     # declaring these variables so that we can use them inside outside the if statement
     X, y, X_train, X_test, y_train, y_test = None, None, None, None, None, None
@@ -27,31 +28,13 @@ def dt(df, dataset):
 
     print(" | Splitting", end="")
 
+    #y = np.ravel(df.iloc[:, -1:])
     # Split dataset into random train and test subsets:
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
     print(" | Classifying", end="")
-    # Train the decision tree classifier by fitting the DecisionTreeClassifier 
-    # change max_depth to change proabibilities
-    # classifier = DecisionTreeClassifier(max_depth=4)
-    classifier = DecisionTreeClassifier(criterion='entropy', max_depth=4)
-    classifier = classifier.fit(X_train, y_train)
 
-    print(" | Predicting \n", end="")
+    gnb = GaussianNB()
+    predcitions = gnb.fit(X_train, y_train).predict(X_test)
 
-    predictions = classifier.predict(X_test)
-    #print(predictions) 
-
-    # classifier.predict_proba(X_test)
-    accuracy_score(y_test, predictions)
-    precision_score(y_test, predictions, average='micro')
-
-    # Feature Importance for the results
-    feature_names = X.columns
-    feature_importance = pd.DataFrame(
-    classifier.feature_importances_, index=feature_names).sort_values(0, ascending=False)
-    print(" Feature Importance: ")
-    print(feature_importance)
-
-    return classification_report(y_test, predictions)
-
+    return classification_report(y_test, predcitions)

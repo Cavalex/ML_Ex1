@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 from parse import *
 from classifiers.knn import *
 from classifiers.dt import *
-#
+from classifiers.nb import *
+
 from arff_to_csv import *
 
 def parseDatasets(dataset_dfs):
@@ -37,7 +38,7 @@ def classifyDatasets(classifiers):
 def main():
     classifications = {} # stores the classifications of each dataset according to a specific classifier
     dataset_dfs = [] # stores the dataframes of each dataset after parsing
-    classifiers = [knn,dt]
+    classifiers = [knn,dt, nb]
 
     convertFiles() # converts from arff to csv
     print("\nConverted arff files")
