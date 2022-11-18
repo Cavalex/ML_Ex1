@@ -82,7 +82,18 @@ def parse(fileName):
     # we think there's nothing to parse here
     elif fileName == "amz":
         
-        del df["Class"]
+        #del df["Class"]
+
+        people = df["Class"].unique()
+
+        dict= {} # create an empty dictionary
+        values = list(zip(people, range(len(people))))
+        for i in range(len(values)):
+            dict[values[i][0]] = values[i][1]
+
+        #print(dict)
+
+        df["Class"] = df["Class"].map(dict).astype(int) #mapping numbers
 
         totalRows = len(df.index)
         """ for i in range(len(df.columns)):

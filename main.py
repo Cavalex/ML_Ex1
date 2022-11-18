@@ -30,7 +30,7 @@ def classifyDatasets(classifiers):
         for classifier in classifiers:
             if dataset in classifications:
                 print(f"Classifying {fileToBeRead}", end="")
-                classifications[dataset].append(classifier(df))
+                classifications[dataset].append(classifier(df, dataset))
 
     return classifications
 
@@ -48,7 +48,13 @@ def main():
     classifications = classifyDatasets(classifiers)
     print("\nClassified Datasets")
 
-    print(classifications)
+    for dataset in classifications:
+        print("\n----------------------------------------------------------------------------")
+        print(dataset)
+        for i in range(len(classifiers)):
+            print("\n\t" + classifiers[i].__name__ + ":\n")
+            print(classifications[dataset][i])
+    #print(classifications)
 
 if __name__ == "__main__":
     main()
