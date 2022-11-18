@@ -9,7 +9,7 @@ from config import *
 
 
 def saveToFile(df, fileName):
-    df.to_csv(f"{fileName}" + "_parsed.csv" , sep=';', index = False, encoding='mbcs')
+    df.to_csv(f"{fileName[:-4]}" + "_parsed.csv" , sep=';', index = False, encoding='mbcs')
 
 def parse(fileName, dataset_name):
 
