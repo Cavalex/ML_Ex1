@@ -33,17 +33,25 @@ def dt(df, dataset):
     print(" | Classifying", end="")
     # Train the decision tree classifier by fitting the DecisionTreeClassifier 
     # change max_depth to change proabibilities
-    classifier = DecisionTreeClassifier(max_depth=4)
+    # classifier = DecisionTreeClassifier(max_depth=4)
+    classifier = DecisionTreeClassifier(criterion='entropy', max_depth=4)
     classifier = classifier.fit(X_train, y_train)
 
-    print(" | Predicting", end="")
+    print(" | Predicting \n", end="")
 
     predictions = classifier.predict(X_test)
-    print(predictions) 
+    #print(predictions) 
 
     # classifier.predict_proba(X_test)
     accuracy_score(y_test, predictions)
     precision_score(y_test, predictions, average='micro')
+
+    # Feature Importance for the results
+    feature_names = X.columns
+    feature_importance = pd.DataFrame(
+    classifier.feature_importances_, index=feature_names).sort_values(0, ascending=False)
+    print(" Feature Importance: ")
+    print(feature_importance)
 
     return classification_report(y_test, predictions)
 
