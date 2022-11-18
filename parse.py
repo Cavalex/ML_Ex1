@@ -9,20 +9,20 @@ from config import *
 
 
 def saveToFile(df, fileName):
-    df.to_csv(f".{DATASET_FOLDER}/{fileName[:-4]}" + "_parsed.csv" , sep=';', index = False, encoding='mbcs')
+    df.to_csv(f".{DATASET_FOLDER}/{fileName}" + "_parsed.csv" , sep=';', index = False, encoding='mbcs')
 
 def parse(fileName):
 
     totalRows = 0
     deletedRows = 0
 
-    fileToBeRead = f".{DATASET_FOLDER}/{fileName}"
+    fileToBeRead = f".{DATASET_FOLDER}/{fileName}.csv"
     df = pd.read_csv(fileToBeRead,  sep=',', on_bad_lines="skip") # reads the csv file and creates a dataframe based on it
     #print(f"\nLoaded {fileToBeRead}")
 
     # --------------------------- FOOTBALL ---------------------------
 
-    if fileName == "football.csv":
+    if fileName == "football":
 
         # deleting unnecessary columns
         del df["id_match"]
@@ -45,7 +45,7 @@ def parse(fileName):
 
     # --------------------------- HEART ---------------------------
     
-    elif fileName == "heart.csv":
+    elif fileName == "heart":
 
         #df.columns = df.columns.str.lstrip("'")
 
@@ -80,7 +80,7 @@ def parse(fileName):
     # --------------------------- AMAZON ---------------------------
     
     # we think there's nothing to parse here
-    elif fileName == "amz.csv":
+    elif fileName == "amz":
         
         del df["Class"]
 
@@ -91,7 +91,7 @@ def parse(fileName):
 
     # --------------------------- VOTING ---------------------------
     
-    elif fileName == "voting.csv":
+    elif fileName == "voting":
 
         # delete the id column because we don't need it to classify anything
         del df["ID"]

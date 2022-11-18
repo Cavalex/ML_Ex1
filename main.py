@@ -12,24 +12,26 @@ def parseDatasets(dataset_dfs):
     for dataset in DATASETS:
         dataset_dfs.append(parse(dataset))
 
-def readParsedDatasets(dataset_dfs):
-    for dataset in DATASETS:
-        fileToBeRead = f".{DATASET_FOLDER}/{dataset}"
-        dataset_dfs.append(pd.read_csv(fileToBeRead,  sep=',', on_bad_lines="skip"))
+#def readParsedDatasets(dataset_dfs):
+#    for dataset in DATASETS:
+#        fileToBeRead = f".{DATASET_FOLDER}/{dataset}"
+#        dataset_dfs.append(pd.read_csv(fileToBeRead,  sep=',', on_bad_lines="skip"))
 
-def classifyDatasets(dataset_dfs, classifiers):
+def classifyDatasets(classifiers):
     classifications = {}
 
     for dataset in DATASETS:
         classifications[dataset] = []
 
-    for i in range(len(DATASETS)):
+    for dataset in DATASETS:
+        fileToBeRead = f".{DATASET_FOLDER}/{dataset}_parsed.csv"
+        df = pd.read_csv(fileToBeRead,  sep=';', on_bad_lines="skip") # reads the csv file and creates a dataframe based on it
         # classify using each function:
         for classifier in classifiers:
-            if DATASETS[i] in classifications:
-                print(f"Classifying {DATASET_FOLDER}/{DATASETS[i]}")
-                classifications[DATASETS[i]].append(classifier(dataset_dfs[i]))
-    
+            if dataset in classifications:
+                print(f"Classifying {fileToBeRead}", end="")
+                classifications[dataset].append(classifier(df))
+
     return classifications
 
 def main():
@@ -43,8 +45,10 @@ def main():
     parseDatasets(dataset_dfs)
     print("\nParsed Datasets")
 
-    classifications = classifyDatasets(dataset_dfs, classifiers)
+    classifications = classifyDatasets(classifiers)
     print("\nClassified Datasets")
+
+    print(classifications)
 
 if __name__ == "__main__":
     main()
