@@ -54,14 +54,14 @@ def knn(df, dataset):
     classifier = KNeighborsClassifier(n_neighbors=K_NEIGHBOURS) # Use the KNN classifier to fit data:
     classifier.fit(X_train, y_train) 
 
-    print(" | Predicting\n")
-    y_predict = classifier.predict(X_test) # Predict y data with classifier: 
+    print(" | Predicting")
+    predictions = classifier.predict(X_test) # Predict y data with classifier: 
 
     # Print results: 
-    #print(confusion_matrix(y_test, y_predict))
-    #print(classification_report(y_test, y_predict))
+    #print(confusion_matrix(y_test, predictions))
+    #print(classification_report(y_test, predictions))
 
-    #return confusion_matrix(y_test, y_predict)
+    #return confusion_matrix(y_test, predictions)
 
-    return classification_report(y_test, y_predict)
-    #return classification_report(y_test, y_predict)
+    return classification_report(y_test, predictions)
+    #return classification_report(y_test, predictions)

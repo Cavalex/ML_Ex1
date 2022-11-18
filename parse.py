@@ -9,20 +9,19 @@ from config import *
 
 
 def saveToFile(df, fileName):
-    df.to_csv(f".{DATASET_FOLDER}/{fileName}" + "_parsed.csv" , sep=';', index = False, encoding='mbcs')
+    df.to_csv(f"{fileName}" + "_parsed.csv" , sep=';', index = False, encoding='mbcs')
 
-def parse(fileName):
+def parse(fileName, dataset_name):
 
+    # just for debugging, we won't use these
     totalRows = 0
     deletedRows = 0
 
-    fileToBeRead = f".{DATASET_FOLDER}/{fileName}.csv"
-    df = pd.read_csv(fileToBeRead,  sep=',', on_bad_lines="skip") # reads the csv file and creates a dataframe based on it
-    #print(f"\nLoaded {fileToBeRead}")
+    df = pd.read_csv(fileName,  sep=',', on_bad_lines="skip") # reads the csv file and creates a dataframe based on it
 
     # --------------------------- FOOTBALL ---------------------------
 
-    if fileName == "football":
+    if dataset_name == "football":
 
         # deleting unnecessary columns
         del df["id_match"]
@@ -45,7 +44,7 @@ def parse(fileName):
 
     # --------------------------- HEART ---------------------------
     
-    elif fileName == "heart":
+    elif dataset_name == "heart":
 
         #df.columns = df.columns.str.lstrip("'")
 
@@ -80,86 +79,89 @@ def parse(fileName):
     # --------------------------- AMAZON ---------------------------
     
     # we think there's nothing to parse here
-    elif fileName == "amz":
+    elif dataset_name == "amz":
         
         #del df["Class"]
 
-        people = df["Class"].unique()
+        if "Class" in df: # check if the column exists before using it, or else it will crash
+            people = df["Class"].unique()
 
-        dict= {} # create an empty dictionary
-        values = list(zip(people, range(len(people))))
-        for i in range(len(values)):
-            dict[values[i][0]] = values[i][1]
+            dict= {} # create an empty dictionary
+            values = list(zip(people, range(len(people))))
+            for i in range(len(values)):
+                dict[values[i][0]] = values[i][1]
 
-        #print(dict)
+            #print(dict)
 
-        df["Class"] = df["Class"].map(dict).astype(int) #mapping numbers
+            df["Class"] = df["Class"].map(dict).astype(int) #mapping numbers
 
-        totalRows = len(df.index)
-        """ for i in range(len(df.columns)):
-            df = df.loc[df[df.columns[i]] != "?"]
-        deletedRows  = totalRows - len(df.index) """
+            totalRows = len(df.index)
+            """ for i in range(len(df.columns)):
+                df = df.loc[df[df.columns[i]] != "?"]
+            deletedRows  = totalRows - len(df.index) """
 
     # --------------------------- VOTING ---------------------------
     
-    elif fileName == "voting":
+    elif dataset_name == "voting":
 
-        # delete the id column because we don't need it to classify anything
-        del df["ID"]
+        if "class" in df: # check if the column exists before using it, or else it will crash
 
-        # replacing the y and n with 1 and 0 respectively
-        df = df.replace(["y"], 1)
-        df = df.replace(["n"], 0)
+            # delete the id column because we don't need it to classify anything
+            del df["ID"]
 
-        # replacing unknown values with the most probable ones having in account their political parties
-        reps = df["class"].value_counts().republican
-        dems = df["class"].value_counts().democrat
+            # replacing the y and n with 1 and 0 respectively
+            df = df.replace(["y"], 1)
+            df = df.replace(["n"], 0)
 
-        # replacing the class names with a bit to make later processing easier
-        df = df.replace(["democrat"], 1)
-        df = df.replace(["republican"], 0)
+            # replacing unknown values with the most probable ones having in account their political parties
+            reps = df["class"].value_counts().republican
+            dems = df["class"].value_counts().democrat
 
-        new_df = df
-        for i in range(len(new_df.columns)):
-            new_df = new_df.loc[new_df[new_df.columns[i]] != "unknown"]
-        
-        # gets the sum of yes'es or no's on each column so that we can calculate a probability of them voting for each problem
-        reps_votes = new_df[(new_df["class"] == 1)].sum().to_numpy()[2:]
-        dems_votes = new_df[(new_df["class"] == 0)].sum().to_numpy()[2:]
+            # replacing the class names with a bit to make later processing easier
+            df = df.replace(["democrat"], 1)
+            df = df.replace(["republican"], 0)
 
-        #print(f"reps: {reps} | dems: {dems}")
+            new_df = df
+            for i in range(len(new_df.columns)):
+                new_df = new_df.loc[new_df[new_df.columns[i]] != "unknown"]
+            
+            # gets the sum of yes'es or no's on each column so that we can calculate a probability of them voting for each problem
+            reps_votes = new_df[(new_df["class"] == 1)].sum().to_numpy()[2:]
+            dems_votes = new_df[(new_df["class"] == 0)].sum().to_numpy()[2:]
 
-        #print(reps_votes)
-        #print(dems_votes)
+            #print(f"reps: {reps} | dems: {dems}")
 
-        # now we calculate the probablities of voting "y" on a specfic resolution
-        reps_votes = [round((reps_votes[i] / reps) * 100) for i in range(len(reps_votes))]
-        dems_votes = [round((dems_votes[i] / dems) * 100) for i in range(len(dems_votes))]
+            #print(reps_votes)
+            #print(dems_votes)
 
-        #print(reps_votes)
-        #print(dems_votes)
+            # now we calculate the probablities of voting "y" on a specfic resolution
+            reps_votes = [round((reps_votes[i] / reps) * 100) for i in range(len(reps_votes))]
+            dems_votes = [round((dems_votes[i] / dems) * 100) for i in range(len(dems_votes))]
 
-        # replace the unkowns in the original df with the respective values according to the probabilities
-        for index in df.index:
-            if df.loc[index,"class"] == 0: # republican
-                for col in df:
-                    col_index = 2
-                    if df.loc[index, col] == "unknown":
-                        df.loc[index, col] = 1 if random.randint(0,100) < reps_votes[col_index] else 0
-                    col_index += 1
-            else:
-                for col in df:
-                    col_index = 2
-                    if df.loc[index, col] == "unknown":
-                        df.loc[index, col] = 1 if random.randint(0,100) < dems_votes[col_index] else 0
-                    col_index += 1
-        
-        # convert everything to int
-        for col in df:
-            df[col] = df[col].astype('int')
+            #print(reps_votes)
+            #print(dems_votes)
 
-        # we removed all lines with "unknown", it can be used later for classifying data
-        totalRows = len(df.index)
+            # replace the unkowns in the original df with the respective values according to the probabilities
+            for index in df.index:
+                if df.loc[index,"class"] == 0: # republican
+                    for col in df:
+                        col_index = 2
+                        if df.loc[index, col] == "unknown":
+                            df.loc[index, col] = 1 if random.randint(0,100) < reps_votes[col_index] else 0
+                        col_index += 1
+                else:
+                    for col in df:
+                        col_index = 2
+                        if df.loc[index, col] == "unknown":
+                            df.loc[index, col] = 1 if random.randint(0,100) < dems_votes[col_index] else 0
+                        col_index += 1
+            
+            # convert everything to int
+            for col in df:
+                df[col] = df[col].astype('int')
+
+            # we removed all lines with "unknown", it can be used later for classifying data
+            totalRows = len(df.index)
 
 
     else:
@@ -167,7 +169,7 @@ def parse(fileName):
 
     saveToFile(df, fileName) # saves to the _parsed file
     #print(df.to_string(index = False))
-    print(f"Parsed {fileToBeRead}")
+    print(f"Parsed {fileName}")
     #print(f"Initial total number of rows: {totalRows}")
     #print(f"Deleted Rows: {deletedRows}\n")
 

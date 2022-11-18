@@ -35,6 +35,9 @@ def nb(df, dataset):
     print(" | Classifying", end="")
 
     gnb = GaussianNB()
-    predcitions = gnb.fit(X_train, y_train).predict(X_test)
 
-    return classification_report(y_test, predcitions)
+    print(" | Predicting")
+
+    predictions = gnb.fit(X_train, y_train).predict(X_test)
+
+    return classification_report(y_test, predictions)

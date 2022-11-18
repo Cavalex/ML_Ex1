@@ -37,7 +37,7 @@ def dt(df, dataset):
     classifier = DecisionTreeClassifier(criterion='entropy', max_depth=DT_DEPTH)
     classifier = classifier.fit(X_train, y_train)
 
-    print(" | Predicting \n", end="")
+    print(" | Predicting")
 
     predictions = classifier.predict(X_test)
     #print(predictions) 
@@ -47,9 +47,8 @@ def dt(df, dataset):
     precision_score(y_test, predictions, average='micro')
 
     # Feature Importance for the results
-    feature_names = X.columns
-    feature_importance = pd.DataFrame(
-    classifier.feature_importances_, index=feature_names).sort_values(0, ascending=False)
+    #feature_names = X.columns
+    #feature_importance = pd.DataFrame(classifier.feature_importances_, index=feature_names).sort_values(0, ascending=False)
     #print(" Feature Importance: ")
     #print(feature_importance)
 
