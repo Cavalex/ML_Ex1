@@ -40,7 +40,7 @@ def classifyDatasets(classifiers):
 
     for dataset in DATASETS:
         fileToBeRead = f".{DATASET_FOLDER}/{dataset}_parsed.csv"
-        df = pd.read_csv(fileToBeRead,  sep=';', on_bad_lines="skip") # reads the csv file and creates a dataframe based on it
+        df = pd.read_csv(fileToBeRead,  sep=',', on_bad_lines="skip") # reads the csv file and creates a dataframe based on it
         # classify using each function:
         for classifier in classifiers:
             print()

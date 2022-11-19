@@ -35,7 +35,8 @@ def dt(df, dataset):
     # change max_depth to change proabibilities
     # classifier = DecisionTreeClassifier(max_depth=4)
     classifier = DecisionTreeClassifier(criterion='entropy', max_depth=DT_DEPTH)
-    classifier = classifier.fit(X_train, y_train)
+    classifier.fit(X_train, y_train)
+    #classifier = classifier.fit(X_train, y_train)
 
     print(" | Predicting")
 

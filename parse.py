@@ -7,10 +7,6 @@ import random
 from arff_to_csv import *
 from config import *
 
-
-def saveToFile(df, fileName):
-    df.to_csv(f"{fileName[:-4]}" + "_parsed.csv" , sep=';', index = False, encoding='mbcs')
-
 def parse(fileName, dataset_name):
 
     # just for debugging, we won't use these
@@ -80,20 +76,22 @@ def parse(fileName, dataset_name):
     
     # we think there's nothing to parse here
     elif dataset_name == "amz":
+
+        global reviewers
         
         #del df["Class"]
 
         if "Class" in df: # check if the column exists before using it, or else it will crash
             people = df["Class"].unique()
 
-            dict= {} # create an empty dictionary
+            #reviewers= {} # will store the reviewers name and new id
             values = list(zip(people, range(len(people))))
             for i in range(len(values)):
-                dict[values[i][0]] = values[i][1]
+                reviewers[values[i][0]] = values[i][1]
 
-            #print(dict)
+            #print(reviewers)
 
-            df["Class"] = df["Class"].map(dict).astype(int) #mapping numbers
+            df["Class"] = df["Class"].map(reviewers).astype(int) #mapping numbers
 
             totalRows = len(df.index)
             """ for i in range(len(df.columns)):
@@ -103,6 +101,9 @@ def parse(fileName, dataset_name):
     # --------------------------- VOTING ---------------------------
     
     elif dataset_name == "voting":
+
+        global dems_votes
+        global reps_votes
 
         if "class" in df: # check if the column exists before using it, or else it will crash
 
@@ -129,17 +130,9 @@ def parse(fileName, dataset_name):
             reps_votes = new_df[(new_df["class"] == 1)].sum().to_numpy()[2:]
             dems_votes = new_df[(new_df["class"] == 0)].sum().to_numpy()[2:]
 
-            #print(f"reps: {reps} | dems: {dems}")
-
-            #print(reps_votes)
-            #print(dems_votes)
-
             # now we calculate the probablities of voting "y" on a specfic resolution
             reps_votes = [round((reps_votes[i] / reps) * 100) for i in range(len(reps_votes))]
             dems_votes = [round((dems_votes[i] / dems) * 100) for i in range(len(dems_votes))]
-
-            #print(reps_votes)
-            #print(dems_votes)
 
             # replace the unkowns in the original df with the respective values according to the probabilities
             for index in df.index:
@@ -162,12 +155,24 @@ def parse(fileName, dataset_name):
 
             # we removed all lines with "unknown", it can be used later for classifying data
             totalRows = len(df.index)
+        else: # if it's the training set basically:
+
+            df = df.replace(["y"], 1)
+            df = df.replace(["n"], 0)
+
+            # replace the unkowns in the original df with the respective values according to the probabilities
+            for index in df.index:
+                for col in df:
+                    col_index = 1
+                    if df.loc[index, col] == "unknown":
+                        df.loc[index, col] = 1 if random.randint(0,100) < round((reps_votes[col_index] + dems_votes[col_index]) / 2) else 0
+                    col_index += 1
 
 
     else:
         print("File not found!")
 
-    saveToFile(df, fileName) # saves to the _parsed file
+    saveToFile(df, fileName, "_parsed.csv") # saves to the _parsed file
     #print(df.to_string(index = False))
     print(f"Parsed {fileName}")
     #print(f"Initial total number of rows: {totalRows}")
