@@ -2,6 +2,8 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import classification_report, accuracy_score, precision_score
+from sklearn.metrics import ConfusionMatrixDisplay
+import matplotlib.pyplot as plt
 
 from config import *
 
@@ -83,6 +85,12 @@ def dt(df, dataset):
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=TEST_SIZE)
         classifier.fit(X_train, y_train) 
         predictions = classifier.predict(X_test) # Predict y data with classifier: 
+
+        fileToBeRead = f".{IMAGE_FOLDER}/{dataset}_dt.png"
+        ConfusionMatrixDisplay.from_predictions(y_test, predictions)
+        plt.show()
+        plt.savefig(f"{fileToBeRead}")
+
         return classification_report(y_test, predictions)
 
     else:
@@ -116,6 +124,11 @@ def dt(df, dataset):
         #feature_importance = pd.DataFrame(classifier.feature_importances_, index=feature_names).sort_values(0, ascending=False)
         #print(" Feature Importance: ")
         #print(feature_importance)
+
+        fileToBeRead = f".{IMAGE_FOLDER}/{dataset}_dt.png"
+        ConfusionMatrixDisplay.from_predictions(y_test, predictions)
+        plt.show()
+        plt.savefig(f"{fileToBeRead}")
 
         return classification_report(y_test, predictions)
 

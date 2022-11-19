@@ -6,6 +6,8 @@ from sklearn.naive_bayes import CategoricalNB
 from sklearn.naive_bayes import BernoulliNB
 from sklearn.naive_bayes import ComplementNB
 from sklearn.metrics import classification_report, accuracy_score, precision_score
+from sklearn.metrics import ConfusionMatrixDisplay
+import matplotlib.pyplot as plt
 
 from config import *
 
@@ -69,11 +71,11 @@ def nb(df, dataset):
 
 
         print(" | Classifying", end="")
-        #classifier = GaussianNB()
+        classifier = GaussianNB()
         #classifier = CategoricalNB()
         #classifier = BernoulliNB()
-        classifier = ComplementNB()
-        classifier.fit(X, y) 
+        #classifier = ComplementNB()
+        classifier.fit(X, y)
 
         print(" | Predicting")
         predictions = classifier.predict(X_test) # Predict y data with classifier: 
@@ -95,6 +97,12 @@ def nb(df, dataset):
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=TEST_SIZE)
         classifier.fit(X_train, y_train) 
         predictions = classifier.predict(X_test) # Predict y data with classifier: 
+
+        fileToBeRead = f".{IMAGE_FOLDER}/{dataset}_nb.png"
+        ConfusionMatrixDisplay.from_predictions(y_test, predictions)
+        plt.show()
+        plt.savefig(f"{fileToBeRead}")
+
         return classification_report(y_test, predictions)
 
     else:
@@ -114,5 +122,10 @@ def nb(df, dataset):
         print(" | Predicting")
 
         predictions = gnb.fit(X_train, y_train).predict(X_test)
+
+        fileToBeRead = f".{IMAGE_FOLDER}/{dataset}_nb.png"
+        ConfusionMatrixDisplay.from_predictions(y_test, predictions)
+        plt.show()
+        plt.savefig(f"{fileToBeRead}")
 
         return classification_report(y_test, predictions)

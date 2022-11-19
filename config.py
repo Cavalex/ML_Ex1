@@ -3,6 +3,7 @@ import pandas as pd
 DATASET_FOLDER = "/data/datasets"
 TEST_FOLDER = "/data/tests"
 PREDICTION_FOLDER = "/data/predictions"
+IMAGE_FOLDER = "/data/images"
 
 # name of the files before being processed
 DATASETS = [

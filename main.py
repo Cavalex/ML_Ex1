@@ -8,13 +8,18 @@ from classifiers.dt import *
 from classifiers.nb import *
 
 from arff_to_csv import *
-
+from plot import *
 
 #def readParsedDatasets(dataset_dfs):
 #    for dataset in DATASETS:
 #        fileToBeRead = f".{DATASET_FOLDER}/{dataset}"
 #        dataset_dfs.append(pd.read_csv(fileToBeRead,  sep=',', on_bad_lines="skip"))
 
+def plotDatasets():
+    for dataset in DATASETS:
+        fileToBeRead = f".{DATASET_FOLDER}/{dataset}_parsed.csv"
+        df = pd.read_csv(fileToBeRead,  sep=',', on_bad_lines="skip") # reads the csv file and creates a dataframe based on it
+        plot(dataset, df)
 
 def parseDatasets():
     dataset_dfs = []
@@ -69,6 +74,9 @@ def main():
 
     classifications = classifyDatasets(classifiers)
     print("Classified Datasets\n")
+
+    #plotDatasets()
+    #print("Plotted Datasets\n")
 
     # this will print the results of our training
     for dataset in classifications:

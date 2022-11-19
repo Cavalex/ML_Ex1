@@ -2,6 +2,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler 
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.metrics import ConfusionMatrixDisplay
+import matplotlib.pyplot as plt
 import pandas as pd 
 
 from config import *
@@ -63,6 +65,12 @@ def knn(df, dataset):
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=TEST_SIZE)
         classifier.fit(X_train, y_train) 
         predictions = classifier.predict(X_test) # Predict y data with classifier: 
+
+        """ fileToBeRead = f".{IMAGE_FOLDER}/{dataset}_knn.png"
+        ConfusionMatrixDisplay.from_predictions(y_test, predictions)
+        plt.show()
+        plt.savefig(f"{fileToBeRead}") """
+
         return classification_report(y_test, predictions)
     
     elif dataset == "voting":
@@ -101,6 +109,12 @@ def knn(df, dataset):
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=TEST_SIZE)
         classifier.fit(X_train, y_train) 
         predictions = classifier.predict(X_test) # Predict y data with classifier: 
+
+        fileToBeRead = f".{IMAGE_FOLDER}/{dataset}_knn.png"
+        ConfusionMatrixDisplay.from_predictions(y_test, predictions)
+        plt.show()
+        plt.savefig(f"{fileToBeRead}")
+
         return classification_report(y_test, predictions)
     
     else:
@@ -126,5 +140,10 @@ def knn(df, dataset):
 
         print(" | Predicting")
         predictions = classifier.predict(X_test) # Predict y data with classifier: 
+
+        fileToBeRead = f".{IMAGE_FOLDER}/{dataset}_knn.png"
+        ConfusionMatrixDisplay.from_predictions(y_test, predictions)
+        plt.show()
+        plt.savefig(f"{fileToBeRead}")
 
         return classification_report(y_test, predictions)
