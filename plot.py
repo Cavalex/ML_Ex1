@@ -14,9 +14,10 @@ def plot(dataset_name, df):
         #plt.close()
         sns.set_style("whitegrid")
         #sns.pairplot(df, hue="class", height=3)
-        sns.pointplot(df, hue="class")
+        sns.histplot(df["class"], kde=True)
         plt.show()
-        plt.savefig(f"{dataset_name}.png")
+        fileToSave = f".{IMAGE_FOLDER}/{dataset_name}_classes.png"
+        plt.savefig(fileToSave)
 
         """ sns.set_style(“whitegrid”);
         sns.FacetGrid(df, hue=’species’, size=5).map(plt.scatter, “sepal_length”, “sepal_width”).add_legend();

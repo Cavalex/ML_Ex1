@@ -72,11 +72,11 @@ def main():
     test_dfs = parseTestDatasets()
     print("Parsed Test Datasets\n")
 
-    classifications = classifyDatasets(classifiers)
-    print("Classified Datasets\n")
+    #classifications = classifyDatasets(classifiers)
+    #print("Classified Datasets\n")
 
-    #plotDatasets()
-    #print("Plotted Datasets\n")
+    plotDatasets()
+    print("Plotted Datasets\n")
 
     # this will print the results of our training
     for dataset in classifications:

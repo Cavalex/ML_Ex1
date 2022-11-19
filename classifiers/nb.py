@@ -7,6 +7,12 @@ from sklearn.naive_bayes import BernoulliNB
 from sklearn.naive_bayes import ComplementNB
 from sklearn.metrics import classification_report, accuracy_score, precision_score
 from sklearn.metrics import ConfusionMatrixDisplay
+from sklearn.metrics import roc_curve
+from sklearn.metrics import RocCurveDisplay
+from sklearn.metrics import precision_recall_curve
+from sklearn.metrics import PrecisionRecallDisplay
+from sklearn.model_selection import validation_curve
+
 import matplotlib.pyplot as plt
 
 from config import *
