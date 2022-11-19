@@ -2,6 +2,9 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
+from sklearn.naive_bayes import CategoricalNB
+from sklearn.naive_bayes import BernoulliNB
+from sklearn.naive_bayes import ComplementNB
 from sklearn.metrics import classification_report, accuracy_score, precision_score
 
 from config import *
@@ -26,7 +29,10 @@ def nb(df, dataset):
         X_test = df_test.drop(["ID"],axis=1)
 
         print(" | Classifying", end="")
-        classifier = GaussianNB()
+        #classifier = GaussianNB()
+        #classifier = CategoricalNB()
+        #classifier = BernoulliNB()
+        classifier = ComplementNB()
         classifier.fit(X, y)
 
         print(" | Predicting")
@@ -41,7 +47,7 @@ def nb(df, dataset):
                     break
         d = {"ID": df_test["ID"], "Class": revs}
         df_save = pd.DataFrame(data=d)
-        fileName = f".{PREDICTION_FOLDER}/{dataset}_nb.csv"
+        fileName = f".{PREDICTION_FOLDER}/{dataset}_compl_nb.csv"
         saveToFile(df_save, fileName, ".csv")
 
         # after saving the results, let's see the accuracy of the model
@@ -63,7 +69,10 @@ def nb(df, dataset):
 
 
         print(" | Classifying", end="")
-        classifier = GaussianNB()
+        #classifier = GaussianNB()
+        #classifier = CategoricalNB()
+        #classifier = BernoulliNB()
+        classifier = ComplementNB()
         classifier.fit(X, y) 
 
         print(" | Predicting")
@@ -79,7 +88,7 @@ def nb(df, dataset):
         d = {"ID": df_test["ID"], "Class": pols}
         #print(d)
         df_save = pd.DataFrame(data=d)
-        fileName = f".{PREDICTION_FOLDER}/{dataset}_nb.csv"
+        fileName = f".{PREDICTION_FOLDER}/{dataset}_compl_nb.csv"
         saveToFile(df_save, fileName, ".csv")
 
         # after saving the results, let's see the accuracy of the model

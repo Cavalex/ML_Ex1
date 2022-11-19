@@ -12,7 +12,7 @@ ID,Class
 72,democrat
 118,republican
 260,democrat
-249,democrat
+249,republican
 351,democrat
 228,democrat
 209,democrat
@@ -27,7 +27,7 @@ ID,Class
 155,republican
 62,republican
 294,democrat
-385,democrat
+385,republican
 314,republican
 302,democrat
 435,republican
@@ -181,7 +181,7 @@ ID,Class
 111,democrat
 116,democrat
 181,democrat
-278,republican
+278,democrat
 353,democrat
 88,republican
 418,democrat
@@ -201,7 +201,7 @@ ID,Class
 180,democrat
 99,democrat
 166,democrat
-108,republican
+108,democrat
 373,republican
 376,republican
 428,republican
