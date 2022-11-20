@@ -57,7 +57,7 @@ def dt(df, dataset):
         
         fileToBeRead = f".{IMAGE_FOLDER}/{dataset}_dt_report.png"
         report =  classification_report(y_test, predictions)
-        plot_classification_report(report, fileToBeRead)
+        plot_classification_report(report, fileToBeRead, title="Decision Trees")
 
         return report
 
@@ -106,7 +106,7 @@ def dt(df, dataset):
 
         fileToBeRead = f".{IMAGE_FOLDER}/{dataset}_dt_report.png"
         report =  classification_report(y_test, predictions)
-        plot_classification_report(report, fileToBeRead)
+        plot_classification_report(report, fileToBeRead, title="Decision Trees")
 
         return report
 
@@ -150,7 +150,7 @@ def dt(df, dataset):
 
         fileToBeRead = f".{IMAGE_FOLDER}/{dataset}_dt_report.png"
         report =  classification_report(y_test, predictions)
-        plot_classification_report(report, fileToBeRead)
+        plot_classification_report(report, fileToBeRead, title="Decision Trees")
 
         return report
 

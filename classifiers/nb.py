@@ -66,7 +66,7 @@ def nb(df, dataset):
         
         fileToBeRead = f".{IMAGE_FOLDER}/{dataset}_nb_report.png"
         report =  classification_report(y_test, predictions)
-        plot_classification_report(report, fileToBeRead)
+        plot_classification_report(report, fileToBeRead, title="Naive Bayes")
 
         return report
 
@@ -118,7 +118,7 @@ def nb(df, dataset):
 
         fileToBeRead = f".{IMAGE_FOLDER}/{dataset}_nb_report.png"
         report =  classification_report(y_test, predictions)
-        plot_classification_report(report, fileToBeRead)
+        plot_classification_report(report, fileToBeRead, title="Naive Bayes")
 
         return report
 
@@ -149,6 +149,6 @@ def nb(df, dataset):
 
         fileToBeRead = f".{IMAGE_FOLDER}/{dataset}_nb_report.png"
         report =  classification_report(y_test, predictions)
-        plot_classification_report(report, fileToBeRead)
+        plot_classification_report(report, fileToBeRead, title="Naive Bayes")
 
         return report
