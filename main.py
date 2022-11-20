@@ -72,8 +72,8 @@ def main():
     test_dfs = parseTestDatasets()
     print("Parsed Test Datasets\n")
 
-    #classifications = classifyDatasets(classifiers)
-    #print("Classified Datasets\n")
+    classifications = classifyDatasets(classifiers)
+    print("Classified Datasets\n")
 
     plotDatasets()
     print("Plotted Datasets\n")
@@ -87,7 +87,6 @@ def main():
             print(classifications[dataset][i])
     
     #print(classifications)
-
 
 if __name__ == "__main__":
     main()

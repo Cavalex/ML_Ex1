@@ -12,6 +12,7 @@ from sklearn.model_selection import validation_curve
 import matplotlib.pyplot as plt
 
 from config import *
+from classifiers.report import *
 
 # Decision Trees
 def dt(df, dataset):
@@ -53,7 +54,12 @@ def dt(df, dataset):
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=TEST_SIZE)
         classifier.fit(X_train, y_train) 
         predictions = classifier.predict(X_test) # Predict y data with classifier: 
-        return classification_report(y_test, predictions)
+        
+        fileToBeRead = f".{IMAGE_FOLDER}/{dataset}_dt_report.png"
+        report =  classification_report(y_test, predictions)
+        plot_classification_report(report, fileToBeRead)
+
+        return report
 
     elif dataset == "voting":
         # create a dataframe with all training data except the target column
@@ -93,11 +99,16 @@ def dt(df, dataset):
         predictions = classifier.predict(X_test) # Predict y data with classifier: 
 
         fileToBeRead = f".{IMAGE_FOLDER}/{dataset}_dt.png"
-        ConfusionMatrixDisplay.from_predictions(y_test, predictions)
+        disp = ConfusionMatrixDisplay.from_predictions(y_test, predictions)
+        disp.ax_.set_title("Decision Trees")
         plt.show()
         plt.savefig(f"{fileToBeRead}")
 
-        return classification_report(y_test, predictions)
+        fileToBeRead = f".{IMAGE_FOLDER}/{dataset}_dt_report.png"
+        report =  classification_report(y_test, predictions)
+        plot_classification_report(report, fileToBeRead)
+
+        return report
 
     else:
         X = df.iloc[:, :-1]
@@ -132,9 +143,14 @@ def dt(df, dataset):
         #print(feature_importance)
 
         fileToBeRead = f".{IMAGE_FOLDER}/{dataset}_dt.png"
-        ConfusionMatrixDisplay.from_predictions(y_test, predictions)
+        disp = ConfusionMatrixDisplay.from_predictions(y_test, predictions)
+        disp.ax_.set_title("Decision Trees")
         plt.show()
         plt.savefig(f"{fileToBeRead}")
 
-        return classification_report(y_test, predictions)
+        fileToBeRead = f".{IMAGE_FOLDER}/{dataset}_dt_report.png"
+        report =  classification_report(y_test, predictions)
+        plot_classification_report(report, fileToBeRead)
+
+        return report
 

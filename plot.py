@@ -11,7 +11,7 @@ def plot(dataset_name, df):
     #df = pd.read_csv(fileName,  sep=',', on_bad_lines="skip") # reads the csv file and creates a dataframe based on it
 
     if dataset_name == "voting":
-        #plt.close()
+        plt.close(fig="all")
         sns.set_style("whitegrid")
         #sns.pairplot(df, hue="class", height=3)
         sns.histplot(df["class"], kde=True)

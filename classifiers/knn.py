@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 import pandas as pd 
 
 from config import *
+from classifiers.report import *
 
 # this will ignore some warning about having some labels that were not classified in the test set
 import warnings
@@ -77,7 +78,11 @@ def knn(df, dataset):
         plt.show()
         plt.savefig(f"{fileToBeRead}") """
 
-        return classification_report(y_test, predictions)
+        fileToBeRead = f".{IMAGE_FOLDER}/{dataset}_knn_report.png"
+        report =  classification_report(y_test, predictions)
+        plot_classification_report(report, fileToBeRead)
+
+        return report
     
     elif dataset == "voting":
         #create a dataframe with all training data except the target column
@@ -118,11 +123,16 @@ def knn(df, dataset):
 
         # saving into images
         fileToBeRead = f".{IMAGE_FOLDER}/{dataset}_knn.png"
-        ConfusionMatrixDisplay.from_predictions(y_test, predictions)
+        disp = ConfusionMatrixDisplay.from_predictions(y_test, predictions)
+        disp.ax_.set_title("K-Nearest Neighbours")
         plt.show()
         plt.savefig(f"{fileToBeRead}")
 
-        return classification_report(y_test, predictions)
+        fileToBeRead = f".{IMAGE_FOLDER}/{dataset}_knn_report.png"
+        report =  classification_report(y_test, predictions)
+        plot_classification_report(report, fileToBeRead)
+
+        return report
     
     else:
         #create a dataframe with all training data except the target column
@@ -149,8 +159,13 @@ def knn(df, dataset):
         predictions = classifier.predict(X_test) # Predict y data with classifier: 
 
         fileToBeRead = f".{IMAGE_FOLDER}/{dataset}_knn.png"
-        ConfusionMatrixDisplay.from_predictions(y_test, predictions)
+        disp = ConfusionMatrixDisplay.from_predictions(y_test, predictions)
+        disp.ax_.set_title("K-Nearest Neighbours")
         plt.show()
         plt.savefig(f"{fileToBeRead}")
 
-        return classification_report(y_test, predictions)
+        fileToBeRead = f".{IMAGE_FOLDER}/{dataset}_knn_report.png"
+        report =  classification_report(y_test, predictions)
+        plot_classification_report(report, fileToBeRead)
+
+        return report
