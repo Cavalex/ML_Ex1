@@ -18,8 +18,11 @@ from plot import *
 def plotDatasets():
     for dataset in DATASETS:
         fileToBeRead = f".{DATASET_FOLDER}/{dataset}_parsed.csv"
-        df = pd.read_csv(fileToBeRead,  sep=',', on_bad_lines="skip") # reads the csv file and creates a dataframe based on it
-        plot(dataset, df)
+        if os.path.isfile(fileToBeRead):
+            df = pd.read_csv(fileToBeRead,  sep=',', on_bad_lines="skip") # reads the csv file and creates a dataframe based on it
+            plot(dataset, df)
+        else:
+            print(f"Dataset {dataset} not found!")
 
 def parseDatasets():
     dataset_dfs = []
@@ -27,6 +30,8 @@ def parseDatasets():
         fileName = f".{DATASET_FOLDER}/{dataset}.csv"
         if os.path.isfile(fileName):
             dataset_dfs.append(parse(fileName, dataset))
+        else:
+            print(f"Dataset {dataset} not found!")
 
 
 def parseTestDatasets():
@@ -35,6 +40,8 @@ def parseTestDatasets():
         fileName = f".{TEST_FOLDER}/{dataset}.csv"
         if os.path.isfile(fileName):
             dataset_dfs.append(parse(fileName, dataset))
+        else:
+            print(f"Dataset {dataset} not found!")
 
 
 def classifyDatasets(classifiers):
@@ -45,14 +52,17 @@ def classifyDatasets(classifiers):
 
     for dataset in DATASETS:
         fileToBeRead = f".{DATASET_FOLDER}/{dataset}_parsed.csv"
-        df = pd.read_csv(fileToBeRead,  sep=',', on_bad_lines="skip") # reads the csv file and creates a dataframe based on it
-        # classify using each function:
-        for classifier in classifiers:
-            print()
-            if dataset in classifications:
-                classifier_name = classifier.__name__
-                print(f"Classifying {fileToBeRead} with {classifier_name}", end="")
-                classifications[dataset].append(classifier(df, dataset))
+        if os.path.isfile(fileToBeRead):
+            df = pd.read_csv(fileToBeRead,  sep=',', on_bad_lines="skip") # reads the csv file and creates a dataframe based on it
+            # classify using each function:
+            for classifier in classifiers:
+                print()
+                if dataset in classifications:
+                    classifier_name = classifier.__name__
+                    print(f"Classifying {fileToBeRead} with {classifier_name}", end="")
+                    classifications[dataset].append(classifier(df, dataset))
+        else:
+            print(f"Dataset {dataset} not found!")
 
     return classifications
 
@@ -64,7 +74,7 @@ def main():
     classifiers = [knn, dt, nb] # stores the classifier functions we will be using to train our models
 
     convertFiles() # converts from arff to csv
-    print("\nConverted arff files")
+    print("\nConverted arff files\n")
 
     dataset_dfs = parseDatasets()
     print("Parsed Training Datasets\n")
@@ -83,9 +93,12 @@ def main():
         print("\n----------------------------------------------------------------------------")
         print(dataset)
         for i in range(len(classifiers)):
-            print("\n\t" + classifiers[i].__name__ + ":\n")
-            print(classifications[dataset][i])
-    
+            try:
+                print("\n\t" + classifiers[i].__name__ + ":\n")
+                print(classifications[dataset][i])
+            except:
+                print(f"Dataset {dataset} not found!")
+        
     #print(classifications)
 
 if __name__ == "__main__":
