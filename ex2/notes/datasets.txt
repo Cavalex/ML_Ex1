@@ -1,0 +1,5 @@
+concrete:
+    https://www.kaggle.com/datasets/prathamtripathi/regression-with-neural-networking
+
+abalone:
+    https://www.kaggle.com/datasets/devzohaib/estimating-the-age-of-abalone-at-a-seafood-farm

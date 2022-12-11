@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 
 class GaussianNaiveBayes:
 
@@ -34,16 +35,31 @@ class GaussianNaiveBayes:
         self.vars = []
         self.priors = []
 
+
         # for every label, calculate the mean and variance of all features
         for label in self.unique_labels:
-            label_features = X[y == label] # remove all other classes except the one selected
-            self.means.append([col.mean() for col in label_features.T])
-            self.vars.append([col.var() for col in label_features.T])
+            label_features = X[y == label]# remove all other classes except the one selected
+
+            #for i, col in enumerate(label_features.T):
+            #print(label_features.T)
+
+            #self.means.append(label_features.mean().to_list())
+            #self.vars.append(label_features.var().to_list())
+
+            #self.means.append([label_features.T[i].mean() for i, col in enumerate(label_features.T)])
+            #self.vars.append([label_features.T[i].var() for i, col in enumerate(label_features.T)])
+            
+            #print(label_features)
+            #print(y)
+            #print(y==label)
+
+            self.means.append([np.array(col).mean() for col in label_features.T.values.tolist()])
+            self.vars.append([np.array(col).var() for col in label_features.T.values.tolist()])
             self.priors.append(label_features.shape[0] / X.shape[0]) # number of samples of this class divided by total number of samples
 
         #print("\nX:", X)
-        #print("\nvars:", self.vars)
-        #print("\nmeans:", self.means)
+        print("\nvars:", self.vars)
+        print("\nmeans:", self.means)
         #print("\npriors:", self.priors)
 
     # predicting the target values given X features. will basically calculate the posterior of each class given the training data
@@ -55,7 +71,9 @@ class GaussianNaiveBayes:
 
         # we now calculate the posterior for each label
         # we will use the formula on notes/posterior_formula.png
-        for x in X:
+
+        #for x in X.values.tolist():
+        for x in X.to_numpy():
             posteriors = [] # we want to select the most likely one according to each label/class
             for i, c in enumerate(self.unique_labels):
                 likelihoods = []
@@ -87,7 +105,7 @@ class GaussianNaiveBayes:
 
     # calculates the gaussian likelihood of the data with the given mean and variance.
     def likelihood(self, x, mean, var):
-
+        #x = float(x)
         # NOTE: Added in denominator to prevent division by zero
         eps = 1e-4
 
@@ -96,25 +114,109 @@ class GaussianNaiveBayes:
 
         return coeff * exponent
 
-# Testing
+
+# testing
 if __name__ == "__main__":
     # Imports
+    import numpy as np
+    import pandas as pd
     from sklearn.model_selection import train_test_split
+    from sklearn.metrics import classification_report
+    from sklearn.naive_bayes import GaussianNB # to compare
     from sklearn import datasets
+    from helpers import *
+    from config import *
 
-    def accuracy(y_true, y_pred):
-        accuracy = np.sum(y_true == y_pred) / len(y_true)
-        return accuracy
+    for dataset in CLASSIFICATION_DTS:
 
-    X, y = datasets.make_classification(
-        n_samples=1000, n_features=10, n_classes=2, random_state=123
-    )
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=123
-    )
+        if dataset == "voting":
+            df = parseDataset(dataset)
 
-    nb = GaussianNaiveBayes()
-    nb.fit(X_train, y_train)
-    predictions = nb.predict(X_test)
+            #X = df.iloc[:, :-1]
+            #y = df.iloc[:, -1:]
 
-    print("Naive Bayes classification accuracy", accuracy(y_test, predictions))
+            X = df.drop(["class"], axis=1)
+            y = df["class"]
+
+            X_train, X_test, y_train, y_test = train_test_split(
+                X, y, test_size=0.2, random_state=123
+            )
+
+            nb = GaussianNaiveBayes()
+            nb.fit(X_train, y_train)
+            predictions = nb.predict(X_test)
+
+            report =  classification_report(y_test, predictions)
+            print(f"\nDataset {dataset}")
+            #print(predictions)
+            #print("\nOur GNB accuracy:", accuracy(y_test, predictions))
+            print("\nOur GNB classification report:\n", report)
+
+            nb = GaussianNB()
+            nb.fit(X_train, y_train)
+            predictions = nb.predict(X_test)
+
+            report =  classification_report(y_test, predictions)
+            #print("\nAlready implemented GNB accuracy:", accuracy(y_test, predictions))
+            print("Already implemented GNB classification report:\n", report)
+        else:
+            df = parseDataset(dataset)
+
+            #X = df.iloc[:, :-1]
+            #y = df.iloc[:, -1:]
+
+            X = df.drop(["\'num\'"], axis=1)
+            y = df["\'num\'"]
+
+            X_train, X_test, y_train, y_test = train_test_split(
+                X, y, test_size=0.2, random_state=123
+            )
+
+            nb = GaussianNaiveBayes()
+            nb.fit(X_train, y_train)
+            predictions = nb.predict(X_test)
+
+            report =  classification_report(y_test, predictions)
+            print(f"\nDataset {dataset}")
+            #print(predictions)
+            #print("\nOur GNB accuracy:", accuracy(y_test, predictions))
+            print("\nOur GNB classification report:\n", report)
+
+            nb = GaussianNB()
+            nb.fit(X_train, y_train)
+            predictions = nb.predict(X_test)
+
+            report =  classification_report(y_test, predictions)
+            #print("\nAlready implemented GNB accuracy:", accuracy(y_test, predictions))
+            print("Already implemented GNB classification report:\n", report)
+
+
+
+
+
+        """ if dataset == "voting":
+            # create a dataframe with all training data except the target column
+            X = df.drop(["class"], axis=1)
+            y = df["class"]
+
+            print(" | Classifying", end="")
+            classifier = GaussianNB()
+            classifier.fit(X, y)
+
+            # after saving the results, let's see the accuracy of the model
+            print(" | Predicting")
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=TEST_SIZE, random_state=123)
+            classifier.fit(X_train, y_train) 
+            predictions = classifier.predict(X_test) # Predict y data with classifier: 
+
+            fileToBeRead = f".{IMAGE_FOLDER}/{dataset}_nb.png"
+            disp = ConfusionMatrixDisplay.from_predictions(y_test, predictions)
+            disp.ax_.set_title("Naive Bayes")
+            plt.show()
+            plt.savefig(f"{fileToBeRead}")
+
+            fileToBeRead = f".{IMAGE_FOLDER}/{dataset}_nb_report.png"
+            report =  classification_report(y_test, predictions)
+            plot_classification_report(report, fileToBeRead, title="Naive Bayes")
+
+            return report """
