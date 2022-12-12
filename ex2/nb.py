@@ -58,8 +58,8 @@ class GaussianNaiveBayes:
             self.priors.append(label_features.shape[0] / X.shape[0]) # number of samples of this class divided by total number of samples
 
         #print("\nX:", X)
-        print("\nvars:", self.vars)
-        print("\nmeans:", self.means)
+        #print("\nvars:", self.vars)
+        #print("\nmeans:", self.means)
         #print("\npriors:", self.priors)
 
     # predicting the target values given X features. will basically calculate the posterior of each class given the training data
@@ -105,7 +105,6 @@ class GaussianNaiveBayes:
 
     # calculates the gaussian likelihood of the data with the given mean and variance.
     def likelihood(self, x, mean, var):
-        #x = float(x)
         # NOTE: Added in denominator to prevent division by zero
         eps = 1e-4
 
@@ -126,6 +125,10 @@ if __name__ == "__main__":
     from sklearn import datasets
     from helpers import *
     from config import *
+    from random import randint
+
+    state = random.randint(1, 999)
+
 
     for dataset in CLASSIFICATION_DTS:
 
@@ -139,7 +142,7 @@ if __name__ == "__main__":
             y = df["class"]
 
             X_train, X_test, y_train, y_test = train_test_split(
-                X, y, test_size=0.2, random_state=123
+                X, y, test_size=0.2, random_state=state
             )
 
             nb = GaussianNaiveBayes()
@@ -159,7 +162,7 @@ if __name__ == "__main__":
             report =  classification_report(y_test, predictions)
             #print("\nAlready implemented GNB accuracy:", accuracy(y_test, predictions))
             print("Already implemented GNB classification report:\n", report)
-        else:
+        elif dataset == "heart":
             df = parseDataset(dataset)
 
             #X = df.iloc[:, :-1]
@@ -169,7 +172,7 @@ if __name__ == "__main__":
             y = df["\'num\'"]
 
             X_train, X_test, y_train, y_test = train_test_split(
-                X, y, test_size=0.2, random_state=123
+                X, y, test_size=0.2, random_state=state
             )
 
             nb = GaussianNaiveBayes()
@@ -189,34 +192,3 @@ if __name__ == "__main__":
             report =  classification_report(y_test, predictions)
             #print("\nAlready implemented GNB accuracy:", accuracy(y_test, predictions))
             print("Already implemented GNB classification report:\n", report)
-
-
-
-
-
-        """ if dataset == "voting":
-            # create a dataframe with all training data except the target column
-            X = df.drop(["class"], axis=1)
-            y = df["class"]
-
-            print(" | Classifying", end="")
-            classifier = GaussianNB()
-            classifier.fit(X, y)
-
-            # after saving the results, let's see the accuracy of the model
-            print(" | Predicting")
-            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=TEST_SIZE, random_state=123)
-            classifier.fit(X_train, y_train) 
-            predictions = classifier.predict(X_test) # Predict y data with classifier: 
-
-            fileToBeRead = f".{IMAGE_FOLDER}/{dataset}_nb.png"
-            disp = ConfusionMatrixDisplay.from_predictions(y_test, predictions)
-            disp.ax_.set_title("Naive Bayes")
-            plt.show()
-            plt.savefig(f"{fileToBeRead}")
-
-            fileToBeRead = f".{IMAGE_FOLDER}/{dataset}_nb_report.png"
-            report =  classification_report(y_test, predictions)
-            plot_classification_report(report, fileToBeRead, title="Naive Bayes")
-
-            return report """

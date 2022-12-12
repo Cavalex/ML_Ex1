@@ -28,10 +28,14 @@ def preprocess(fileName, dataset_name):
 
     elif dataset_name == "abalone":
 
+        # replacing the string values
+        df = df.replace({"F": 0, "M": 1, "I": 2})
+
         totalRows = len(df.index)
         for i in range(len(df.columns)):
             df = df.loc[df[df.columns[i]] != "?"]
         deletedRows  = totalRows - len(df.index)
+
 
     # --------------------------- HEART ---------------------------
     
@@ -143,7 +147,7 @@ def preprocess(fileName, dataset_name):
 
     saveToFile(df, fileName, "_parsed.csv") # saves to the _parsed file
     #print(df.to_string(index = False))
-    print(f"Parsed {fileName}")
+    print(f"\n\nParsed {fileName}")
     #print(f"Initial total number of rows: {totalRows}")
     #print(f"Deleted Rows: {deletedRows}\n")
 
