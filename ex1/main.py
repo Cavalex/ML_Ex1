@@ -32,6 +32,7 @@ def parseDatasets():
             dataset_dfs.append(parse(fileName, dataset))
         else:
             print(f"Dataset {dataset} not found!")
+    return dataset_dfs
 
 
 def parseTestDatasets():
@@ -42,6 +43,7 @@ def parseTestDatasets():
             dataset_dfs.append(parse(fileName, dataset))
         else:
             print(f"Dataset {dataset} not found!")
+    return dataset_dfs
 
 
 def classifyDatasets(classifiers):

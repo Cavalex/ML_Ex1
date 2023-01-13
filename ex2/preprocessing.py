@@ -141,7 +141,6 @@ def preprocess(fileName, dataset_name):
                         df.loc[index, col] = 1 if random.randint(0,100) < round((reps_votes[col_index] + dems_votes[col_index]) / 2) else 0
                     col_index += 1
 
-
     else:
         print("File not found!")
 
